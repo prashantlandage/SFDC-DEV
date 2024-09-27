@@ -1,0 +1,39 @@
+
+<template>
+    <lightning-card title="IMDB Movie Rating"> 
+
+        <lightning-layout>
+            <lightning-layout-item size="7" class="slds-p-around_medium">
+                <lightning-input type="text" label="Enter Movie Name" class="slds-m-around_medium" onchange={handlechange}>   
+                </lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item class="slds-m-top_xx-large slds-m-left_small">
+
+                <lightning-button  label="Search" onclick={handleclick} >
+
+                </lightning-button>
+            </lightning-layout-item>
+
+        </lightning-layout>
+    </lightning-card>
+   
+    <lightning-card>
+        <font size="4">{showtext}</font>
+        
+        <lightning-layout multiple-rows>
+            <template for:each={movies} for:item="movie">
+                <lightning-layout-item key={movie.imdbID} size="3" class="slds-p-around_medium" style="border-style:groove">
+                    <img src={movie.Poster} alt="image not found" style="height: 300px; width: 90%;">
+                    <br>Title : {movie.Title}
+                    <br>Year : {movie.Year}
+                    <br>imdbId : {movie.imdbID}
+                    <br>Type : {movie.Type}
+                    
+
+                </lightning-layout-item>
+            </template>
+        </lightning-layout>
+       
+    </lightning-card>
+</template>

@@ -1,0 +1,15 @@
+<template>
+    <lightning-card  variant="Narrow"  title="Dependent PickList LWC">
+        <div class="slds-var-p-around_small">
+            <c-dependentpickvalue onchildmethod={callFromChild}
+                                        object-api-name="Account"
+                                        object-record-type-id = '0126F0000013TwBQAU'
+                                        controller-field-api-name = 'Country__c'
+                                        controller-field-label = 'Country'
+                                        dependent-field-api-name = 'State__c'
+                                        dependent-field-label = 'State'
+                                        >
+            </c-dependentpickvalue>
+        </div>
+    </lightning-card>
+</template>

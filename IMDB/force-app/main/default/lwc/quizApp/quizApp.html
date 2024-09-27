@@ -1,0 +1,63 @@
+<template>
+    <lightning-card title="Start Your Quiz" class="slds-align_absolute-center">
+    
+        <div class="slds-grid slds-align_absolute-center">
+    <div class="slds-item">
+        <button class="slds-button slds-button_success slds-m-around_x-small" onclick={startquiz}>Start Quiz</button>
+      </div>
+      <div class="slds-item">
+        <button class="slds-button slds-button_destructive slds-m-around_x-small" onclick={closequiz}>Close Quiz</button>   
+       </div>
+    </div>
+    <template if:true={isstarted}>
+
+    
+    <lightning-card title="Quiz App" class="slds-align_absolute-center">
+
+        <template for:each={allQuestions} for:item="ques">
+            <div key={ques.Name} class="slds-m-around_medium">
+                {ques.question__c}
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col">
+                        <input type="radio" class="slds-m-around_small" name={ques.Name} value="a" onchange={handleradio}>
+                        {ques.option_A__c}
+                    </div>
+                    <div class="slds-col">
+                        <input type="radio" class="slds-m-around_small" name={ques.Name} value="b" onchange={handleradio}>
+                        {ques.option_B__c}
+                    </div>
+                    <div class="slds-col">
+                        <input type="radio" class="slds-m-around_small" name={ques.Name} value="c" onchange={handleradio}>
+                        {ques.option_C__c}
+                    </div>
+                    <div class="slds-col">
+                        <input type="radio" class="slds-m-around_small" name={ques.Name} value="d" onchange={handleradio}>
+                        {ques.option_D__c}
+                    </div>
+                    </div>
+            </div>
+
+        </template>
+        <div class="slds-align_absolute-center">
+        <lightning-layout>
+            <lightning-layout-item size="6" padding="around-small">
+                <lightning-button variant="success" label="Submit" onclick={handleSubmit} class="slds-m-left_x-small"></lightning-button>
+
+            </lightning-layout-item>
+            <lightning-layout-item size="6" padding="around-small">
+                <lightning-button variant="destructive" label="Reset"  onclick={handleReset} class="slds-m-left_x-small"></lightning-button>
+               
+            </lightning-layout-item>
+        </lightning-layout>
+        </div>
+        <template if:true={submitted}>
+            <div class="slds-align_absolute-center">
+                <strong>You have Scored {correctAnswer}</strong>
+            </div>
+        </template>
+        
+    </lightning-card>
+
+    </template>
+    </lightning-card>
+</template>

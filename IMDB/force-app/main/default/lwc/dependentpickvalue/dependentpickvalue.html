@@ -1,0 +1,19 @@
+<template>
+    <template if:true={showpicklist}>
+        <lightning-combobox label={controllerFieldLabel}
+                            name={controllerFieldLabel}
+                            options={controllingPicklist} 
+                            value={selectedControlling}
+                            onchange={fetchDependentValue}
+                            class="slds-m-around_medium">
+        </lightning-combobox>
+        <lightning-combobox label={dependentFieldLabel}
+                            name={dependentFieldLabel}
+                            options={finalDependentVal} 
+                            value={selectedControlling}
+                            disabled={dependentDisabled}
+                            onchange={handleDependentPicklist}                                    
+                            class="slds-m-around_medium">
+        </lightning-combobox>
+    </template>
+</template>
