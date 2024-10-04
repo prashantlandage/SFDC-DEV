@@ -1,0 +1,21 @@
+<template>
+    <lightning-card title="Lazy Loading Concept to fetch Accounts">
+        <div style="height: 200px;">
+
+        <lightning-datatable
+        key-field="id"
+        data={accounts}
+        columns={columns}
+        enable-infinite-loading
+        onloadmore={loadmoreData}
+        hide-checkbox-column="true"
+        show-row-number-column="true">
+            
+        </lightning-datatable>
+
+        </div>
+
+        
+        
+    </lightning-card>
+</template>
