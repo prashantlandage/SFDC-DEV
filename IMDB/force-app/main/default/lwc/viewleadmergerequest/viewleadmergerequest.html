@@ -1,0 +1,154 @@
+<template>
+    <lightning-card>
+        <div style="display: flex;margin: 0px 10px;background-color: var(--slds-g-color-neutral-base-95, var(--lwc-pageHeaderColorBackground,rgb(243, 243,243)));">
+            <lightning-icon icon-name="standard:merge" alternative-text="Lead"></lightning-icon>
+            <h2 style="font-size: 1.4rem;font-weight: 600;margin: 0px 6px 0px 20px">{Name}</h2>
+        </div>
+        <div>
+        <div class="h-fields">
+            <div class="h-field">
+                <p><b>Merge From Lead</b></p>
+                <a href={fromLeadLink}>{mergeFromName}</a>
+            </div>
+            <div class="h-field">
+                <p><b>Merge With Lead</b></p>
+                <a href={withLeadLink}>{mergeWithName}</a>
+            </div>
+            <div class="h-field">
+                <p><b>Status</b></p>
+                <p>{mergestatus}</p>
+            </div>
+       
+         </div>
+        </div>
+        <div class="MainContainer">
+          
+            <div class="subContainer">
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col c-border">
+                        <br>
+
+                        <div>
+                            <h1 class="header" style="font-weight: 600;">Merge Lead From</h1>
+                        </div>
+                        <br>
+                        <lightning-input label="First Name " data-id="reset" value={leadMergeRecord.MergeFromFirstName}
+                            disabled="true"></lightning-input>
+                        <lightning-input label="Last Name " data-id="reset" value={leadMergeRecord.MergeFromLastName}
+                            disabled="true"></lightning-input>
+                        <lightning-input data-id="reset" label="Mobile Number" value={leadMergeRecord.MergeFromPhone}
+                            disabled="true"></lightning-input>
+                        <lightning-input data-id="reset" value={leadMergeRecord.MergeFromEmail} label="Email "
+                            disabled="true"></lightning-input>
+                            <lightning-input label="Lead Owner" value={leadMergeRecord.MergeFromOwnerName} disabled="true"></lightning-input>
+                            <lightning-input label="Campaign Name" value={leadMergeRecord.MergeFromSourceName} disabled="true"></lightning-input>
+                    </div>
+
+                    <div class="slds-col c-border">
+                        <br>
+
+                        <div>
+                            <h1 class="header" style="font-weight: 600;">Merge With Lead</h1>
+                        </div>
+                        <br>
+                        <lightning-input label="First Name " data-id="reset" value={leadMergeRecord.MergeWithFirstName}
+                            disabled="true"></lightning-input>
+                        <lightning-input label="Last Name " data-id="reset" value={leadMergeRecord.MergeWithLastName}
+                            disabled="true"></lightning-input>
+                        <lightning-input data-id="reset" label="Mobile Number " value={leadMergeRecord.MergeWithPhone}
+                            disabled="true"></lightning-input>
+                        <lightning-input data-id="reset" label="Email " value={leadMergeRecord.MergeWithEmail}
+                            disabled="true"></lightning-input>
+                            <lightning-input label="Lead Owner" value={leadMergeRecord.MergeWithOwnerName} disabled="true"></lightning-input>
+
+                            
+                            <lightning-input label="Campaign Name" value={leadMergeRecord.MergeWithSourceName} disabled="true"></lightning-input>
+                    </div>
+                    <div class="slds-col c-border">
+                        <div class="slds-form-element slds-p-top_large ">
+                            <div>
+                                <!-- <h1 class="header" style="font-weight: 600;">Required Actions</h1> -->
+                            </div>
+                            <lightning-input class="form" label="Merge Status " data-id="reset"
+                                value={leadMergeRecord.MergeStatus} disabled="true"></lightning-input>
+                            <lightning-input label="Requested By" value={leadMergeRecord.RequestBy} disabled="true">
+                            </lightning-input>
+                            <lightning-input label="Requested Date" value={leadMergeRecord.RequestDate} disabled="true">
+                            </lightning-input>
+
+                            <!-- New owner fields added here -->
+                            
+                            
+
+                            <template if:true={isPending}>
+                                <lightning-radio-group style="font-size: 1.5rem;margin-top:28px" required="true"
+                                    class="form" label="Required Actions" options={options} value={value}
+                                    onchange={handleRequiredActions} type="radio"></lightning-radio-group>
+                            </template>
+
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+
+                <div style="border: 2px solid black;
+                         margin: -20px -4px;
+                         padding: 12px 8px;
+                         border-radius: 0px 0px 10px 10px;
+                         border-top: none;">
+                   
+
+                    <lightning-textarea  class="slds-c-textarea-color-background;" style="margin-top: 30px;"  label="Merge Reason " data-id="reset"
+                        value={leadMergeRecord.MergeReason} required="true" disabled="true"></lightning-textarea>
+                        <div if:true={isRejected}>
+                            <lightning-textarea  class="form"  label="Rejected Reason" value = {leadMergeRecord.RejectedReason}
+                        onchange=  {handleRejectedReason} required="true"></lightning-textarea></div>
+                    <template if:true={ApprovedSection}>
+                       
+                            <div class="Reject">
+                                <!-- <template if:true={ApprovedSection}> -->
+                                <lightning-input class="Approve" label="Approved By" value={leadMergeRecord.Approvedby}
+                                    disabled="true">
+                                </lightning-input>
+                                <lightning-input class="Approve" label="Approved Date"
+                                    value={leadMergeRecord.ApprovedDate} disabled="true">
+                                </lightning-input>
+                            </div>
+                        </template>
+                        <template if:true={RejectedSection}>
+                            <div class="Reject">
+                               
+                                <lightning-input class="Approve" label="Rejected By" value={leadMergeRecord.RejectedBy}
+                                    disabled="true">
+                                </lightning-input>
+                                <lightning-input class="Approve" label="Rejected Date"
+                                    value={leadMergeRecord.RejectedDate} disabled="true"></lightning-input>
+
+                                  <lightning-textarea  class="Approve" label="Rejected Reason"
+                                    value={leadMergeRecord.RejectedReason} disabled="true"></lightning-textarea>
+                            </div>
+                        </template>
+                        
+                  
+
+                    <br>
+
+                </div>
+                <br>
+                <template if:true={isPending}>
+                    <div class="Button">
+                        <lightning-button label="Save" variant="brand" onclick={handlsave}></lightning-button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <lightning-button label="Cancel" variant="neutral" onclick={handleCancel}></lightning-button>
+                    </div>
+                </template>
+
+                <br>
+
+            </div>
+        </div>
+    </lightning-card>
+   
+
+</template>

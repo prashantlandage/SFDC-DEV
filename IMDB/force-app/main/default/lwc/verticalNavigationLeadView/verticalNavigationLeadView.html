@@ -1,0 +1,336 @@
+<template>
+  <div class="highlight-panel">
+    <div class="info-panel">
+      <div class="lead-info">
+        <div style="display: flex;
+              flex-wrap: wrap;
+              height: 100%;
+              align-content: center;
+              margin-left: 10px;">
+          <lightning-icon icon-name="standard:lead" alternative-text="Lead" style="height: fit-content;
+           align-self: center;"></lightning-icon>
+          <div style="margin: 0px 6px 0px 20px;">
+            <h2 style="
+            font-size: 1.0rem;
+            font-weight: 600;
+            ">
+            {leadName}
+          </h2>
+            <span><b>Lead ID: </b></span>
+            <span style="font-size: 14px;
+            letter-spacing: 0.7px;">{LeadRecId}</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="h-fields">
+        <div class="h-field">
+          <p><b>Phone:</b></p>
+          <a href={sendCall}>{leadPhone}</a>
+        </div>
+        <div class="h-field">
+          <p><b>Email:</b></p>
+          <a href={sendEmail}>{leadEmail}</a>
+        </div>
+        <div class="h-field">
+          <p><b>Project:</b></p>
+          <p>{leadProject}</p>
+        </div>
+        <div class="h-field">
+          <p><b>Campaign Channel:</b></p>
+          <p>{leadSource}</p>
+        </div>
+        <div class="h-field">
+          <p><b>Lead Classification:</b></p>
+          <p>{leadClassification}</p>
+        </div>
+      </div>
+      <div class="status">
+        <p>{leadStatus}</p>
+      </div>
+      <div if:true={showActions} class="h-field">
+        <div class="dropdown">
+          <div class="action-container">
+            <p class="drop-down">Actions</p>
+            <i class="arrow rotate-down" style="
+                  top: -2px;
+                  border-color: #1480d6;
+                  border-width: 0 3px 3px 0;
+                "></i>
+          </div>
+          <div class="dropdown-content">
+            <p class="action" onclick={handleMergeRequest}>
+              Lead Merge Request
+            </p>
+            <p class="action" onclick={handleOwnerRequest}>
+              Owner Change Request
+            </p>
+            <p class="action" onclick={handleEligibilityChange}>
+              Change Eligibility Request
+            </p>
+            <p class="action" onclick={handleLockLeadEligibility}>
+              Lock Lead Eligibility
+            </p>
+            <p if:true={sendPriceSheet} class="action" onclick={handleSendPriceSheet}>
+              Send Price Sheet
+            </p>
+            <p class={buttonClass} id="virtualWalkinButton" onclick={handleVirtualWalkinForm}>
+              View Walkin Form
+            </p>
+            <p class={buttonClass} id="Send_WalkIn_Form_Link" onclick={handleSendWalkinForm}>
+              Send Walkin Form Link
+            </p>
+            <!-- <template if:true={isButtonEnabled}>
+              <p class="action" onclick={handleVirtualWalkinForm}>Virtual Walkin Form</p>
+          </template>
+          <template if:false={isButtonEnabled}>
+              <p class="action disabled">Virtual Walkin Form</p>
+          </template> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="main-container">
+    <ul>
+      <div class="menu">
+        <template for:each={sections} for:item="section">
+          <div class="options" key={section.key} data-section={section.key} onclick={handleScrollClick}>
+            <div>
+              <!-- <div class="info"><span>{section.label}</span></div> -->
+              <img src={section.src} alt="Icon" style="width: 30px" title={section.label} />
+            </div>
+          </div>
+        </template>
+      </div>
+    </ul>
+    <div class="body-container">
+      <div style="position: relative; background: white; border: 1px solid grey">
+        <template for:each={sections} for:item="section">
+          <div key={section.key} style="height: 1px"></div>
+          <div class="section" key={section.key} data-view={section.key}>
+            <div class="section-head">
+              <div class="section-name">
+                <img src={section.src} alt="Icon" style="
+                    width: 30px;
+                    border-radius: 22%;
+                    padding: 0px;
+                    margin: 2px 8px 2px 3px;
+                  " />
+                <p>{section.label}</p>
+              </div>
+              <template if:true={section.edit}>
+                <div class="section-edit">
+                  <button class="button-4" title="Edit" onclick={handleEdit} data-id={section.key}>
+                    Edit
+                  </button>
+                </div>
+              </template>
+            </div>
+            <div id={section.key} style="margin-left: 20px; display: flex; flex-wrap: wrap">
+              <template for:each={section.fields} for:item="field">
+                <div key={field.fieldApiName} class="field-container">
+                  <div class="slds-col">
+                    <template if:false={field.checkbox}>
+                      <template if:false={field.lookup}>
+                        <div class="slds-form-element__label" style="
+                            font-size: 0.75rem;
+                            font-family: Trebuchet MS, sans-serif;
+                            font-weight: 200;
+                            color: #656565;
+                          ">
+                          {field.label}
+                        </div>
+                        <br />
+                        <div class="slds-form-element__label fieldValue">
+                          {field.value}
+                        </div>
+                      </template>
+                      <template if:true={field.lookup}>
+                        <div class="slds-form-element__label" style="
+                            font-size: 0.75rem;
+                            font-family: Trebuchet MS, sans-serif;
+                            font-weight: 200;
+                            color: #656565;
+                          ">
+                          {field.label}
+                        </div>
+                        <br />
+                        <a class="slds-form-element__label fieldValue" style="color: #1480d6" data-lookupid={field.Id}
+                          data-object={field.fieldApiName} data-type={field.type}
+                          onclick={navigateToRecord}>{field.value}</a>
+                      </template>
+                    </template>
+                    <template if:true={field.checkbox}>
+                      <div class="checkbox-container">
+                        <div class="checkbox">
+                          <template if:true={field.value}>
+                            <div class="checked"></div>
+                          </template>
+                        </div>
+                        <div class="slds-form-element__label" style="
+                            font-size: 0.75rem;
+                            font-family: Trebuchet MS, sans-serif;
+                            font-weight: 200;
+                            color: #656565;
+                          ">
+                          {field.label}
+                        </div>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+    <div class="relatedTab" onmousedown={handleMouseDown}>
+      <div>
+        <div onclick={relatedHandlerExpand} style="cursor: pointer">
+          <i class="arrow"></i>
+        </div>
+        <div>R</div>
+        <div>E</div>
+        <div>L</div>
+        <div>A</div>
+        <div>T</div>
+        <div>E</div>
+        <div>D</div>
+        <div class="rotate-left" onclick={relatedHandlerContract} style="cursor: pointer">
+          <i class="arrow"></i>
+        </div>
+      </div>
+    </div>
+    <div class="related-content" style={rightPanelWidth}>
+      <lightning-tabset>
+        <lightning-tab label="Lead Stage Activity">
+          <div class="lead-activity-table">
+            <lightning-datatable key-field="Id" data={leadActivityData} columns={leadActivityColumns}
+              onrowaction={handleActivityRowAction}
+               hide-checkbox-column>
+            </lightning-datatable>
+          </div>
+        </lightning-tab>
+        <lightning-tab label="Walk-In">
+          <div class="walk-in-table">
+            <lightning-datatable key-field="Id" data={walkInData} columns={walkInColumns}
+              onrowaction={handleWalkInRowAction} hide-checkbox-column>
+            </lightning-datatable>
+          </div>
+        </lightning-tab>
+        <lightning-tab label="Site Visits">
+          <template if:true={siteAction}>
+            <div class="list-action">
+              <lightning-button icon-name="utility:add" class="slds-m-top_small save" variant="brand" label="Schedule"
+                onclick={newSiteVisit}></lightning-button>
+            </div>
+          </template>
+          <div class="site-visit-table">
+            <lightning-datatable key-field="Id" data={siteVisitData} columns={siteVisitColumns}
+              onrowaction={handleSiteRowAction} hide-checkbox-column>
+            </lightning-datatable>
+          </div>
+        </lightning-tab>
+        <lightning-tab label="Secondary Leads" lwc:if={showSecondaryLeadsTab}>
+          <div class="sec-lead-table">
+            <lightning-datatable key-field="Id" data={secLeadData} columns={secLeadColumns}
+              onrowaction={handleSecRowAction} hide-checkbox-column>
+            </lightning-datatable>
+          </div>
+        </lightning-tab>
+        <lightning-tab label="Duplicate Leads" lwc:if={showDuplicateLeadsTab}>
+          <div class="dup-lead-table">
+            <lightning-datatable key-field="Id" data={dupLeadData} columns={dupLeadColumns}
+              onrowaction={handleDupRowAction} hide-checkbox-column>
+            </lightning-datatable>
+          </div>
+        </lightning-tab>
+        <lightning-tab label="Merged Leads">
+          <div class="merge-leads-table">
+            <lightning-datatable key-field="Id" data={mergeLeadData} columns={mergeLeadColumns}
+              onrowaction={handleMergeRowAction} hide-checkbox-column>
+            </lightning-datatable>
+          </div>
+        </lightning-tab>
+      </lightning-tabset>
+    </div>
+  </div>
+  <template if:true={loading}>
+    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+  </template>
+  <template if:true={edit}>
+    <c-record-edit-modal object-api-name="Lead" fields={fields} record-id={recordId} onsubmitted={handleSubmit}
+      oncancelled={handleEditCancel} style="background-color: black"></c-record-edit-modal>
+  </template>
+  <template if:true={relatedEdit}>
+    <c-record-edit-modal object-api-name={relatedObject} fields={relatedFields} record-id={relatedId}
+      onsubmitted={handleSubmit} oncancelled={handleRelatedEditCancel}
+      style="background-color: black"></c-record-edit-modal>
+  </template>
+  <template if:true={mergeLead}>
+    <div class="modal">
+      <c-leadmergerequest class="mergeRequest" record-id={recordId} oncancel={closeMergeRequest}></c-leadmergerequest>
+    </div>
+  </template>
+  <template if:true={changeOwner}>
+    <div class="modal">
+      <c-sendownerchangerequest class="ownerChange" record-id={recordId}
+        oncancel={closeOwnerChange}></c-sendownerchangerequest>
+    </div>
+  </template>
+  <template if:true={eligibilityModal}>
+    <div class="modal">
+      <c-leadeligibilitychangerequest class="eligibilitychange" record-id={recordId}
+        oncancel={closeEligibilityChange}></c-leadeligibilitychangerequest>
+      <!--  <div class="close-icon">
+                <lightning-button-icon icon-name="utility:close" size="medium" variant="border-filled" alternative-text="next"
+                onclick={closeEligibilityChange}></lightning-button-icon>
+            </div> -->
+    </div>
+  </template>
+  <template if:true={showModal}>
+    <c-previewconfirm style="position: absolute; z-index: 10" title="Price Sheet PDF"
+      message="Do you want to Preview / Send ?" confirm-label="Preview" cancel-label="Send" visible={isDialogVisible}
+      original-message={originalMessage} name="confirmModal" onclick={handleClick} onclose={handleCloseModal}>
+    </c-previewconfirm>
+  </template>
+
+  <template if:true={siteVisitModal}>
+    <div class="modal">
+      <c-newsitevisitcmp class="siteVisit" lead-id={recordId} project-id={projectId}
+        oncancel={closenewSiteVisit}></c-newsitevisitcmp>
+    </div>
+  </template>
+  <template if:true={cancelSiteVisitModal}>
+    <div class="modal">
+      <c-cancelsitevisitform record-id={siteVisitId} oncancel={handleCloseCancelSiteVisit}></c-cancelsitevisitform>
+    </div>
+  </template>
+  <template if:true={completeSiteVisitModal}>
+    <div class="modal">
+      <c-completesitevisitform record-id={siteVisitId}
+        oncancel={handleCloseCompleteSiteVisit}></c-completesitevisitform>
+    </div>
+  </template>
+  <template if:true={invoiceSiteVisitModal}>
+    <div>
+      <c-sitevisit-invoice-details record-id={siteVisitId}
+        oncancel={handleCloseInvoiceSiteVisit}></c-sitevisit-invoice-details>
+    </div>
+  </template>
+  <template if:true={rescheduleSiteVisitModal}>
+    <div class="modal">
+      <c-reschedulesitevisitcmp record-id={siteVisitId} lead-id={recordId} project-id={projectId}
+        oncancel={handleCloseRescheduleSiteVisit}></c-reschedulesitevisitcmp>
+    </div>
+  </template>
+  <template if:true={reassignSiteVisitModal}>
+    <div class="modal">
+      <c-sitevisitreassignment record-id={siteVisitId}
+        oncancel={handleClosereassignSiteVisit}></c-sitevisitreassignment>
+    </div>
+  </template>
+</template>

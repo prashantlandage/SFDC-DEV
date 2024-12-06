@@ -1,0 +1,74 @@
+<template>
+  <div class="box arrow-bottom" style="height: 300px; width: 400px">
+    <div
+      style="
+        height: 300px;
+        width: 400px;
+        overflow-y: scroll;
+        border-color: lightgray;
+        border-style: ridge;
+      "
+    >
+      <div style="text-align: right; height: 10px">
+        <lightning-button-icon
+          icon-name="utility:close"
+          class="red-icon"
+          size="small"
+          variant="border-filled"
+          alternative-text="Close"
+          onclick={closeModal}
+        ></lightning-button-icon>
+      </div>
+      <div style="height: 50px; padding-top: 10px">
+        <div class="block-left">
+          <lightning-button
+            class="slds-m-top_small"
+            style="font-size: large"
+            onclick={handleView}
+            label="View"
+            variant="brand"
+          ></lightning-button>
+        </div>
+        <div class="block-right">
+          <!-- <lightning-icon
+            style="height: 45px; width: 45px"
+            icon-name="action:more"
+            onclick={showalldata}
+          ></lightning-icon> 
+          <lightning-button
+            class="slds-m-top_small"
+            style="font-size: x-large; font-weight: bold; align-items: center"
+            onclick={showalldata}
+            label=". . ."
+            variant="brand"
+          ></lightning-button>-->
+          <img
+            src={imageURL}
+            alt="View More"
+            onclick={showalldata}
+            style="padding-top: 10px"
+          />
+        </div>
+      </div>
+
+      <div class="slds-p-around_x-small">
+        <lightning-datatable
+          data-id="table"
+          class="first-column-bold"
+          key-field="id"
+          data={unitdata}
+          columns={columndata}
+          style="color: black"
+          hide-table-header
+          hide-checkbox-column
+        ></lightning-datatable>
+      </div>
+
+      <!-- <div class="slds-p-around_x-small" style="text-align: right;">
+        <lightning-button label="View More" onclick={showalldata}></lightning-button> -->
+
+      <!--  > -->
+      <!--  </div> -->
+    </div>
+  </div>
+</template>

@@ -1,0 +1,345 @@
+<template>
+  <div class="highlight-panel">
+    <div class="slds-grid slds-wrap slds-p-around_x-small">
+      
+      <div class="slds-size_1-of-8">
+        <div style = "display: grid;">
+          <span><lightning-icon icon-name="custom:custom83" title="custom83"></lightning-icon></span>
+          <span style="font-size: 0.9rem;"><b>{quoteName}</b></span>
+        </div>
+      </div>
+
+        <div class="slds-size_1-of-8">
+          <div style = "display: grid;">
+            <span><b>Quote Number: </b></span>
+            <span style="font-size: 14px;
+            letter-spacing: 0.7px;">{quoteNo}</span>
+          </div>
+       </div>
+
+       <div class="slds-size_1-of-8">
+        <div style = "display: grid;">
+          <span><b>Quote Date: </b></span>
+          <span style="font-size: 14px;
+          letter-spacing: 0.7px;">{quoteDate}</span>
+        </div>
+      </div>
+
+     
+     <div class="slds-size_1-of-8">
+        <div style = "display: grid;">
+          <span><b>Version: </b></span>
+          <span style="font-size: 14px;
+          letter-spacing: 0.7px;">{version} </span>
+        </div>
+     </div>
+
+     <div class="slds-size_1-of-8">
+        <div  style = "display: grid;">
+          <span><b>Opportunity Name: </b></span>
+          <span style="font-size: 14px;
+          letter-spacing: 0.7px;">{oppName}</span>
+        </div>
+     </div>
+     <div class="slds-size_1-of-8">
+      <div style = "display: grid;">
+        <span><b>Status: </b></span>
+        <span style="font-size: 14px;
+        letter-spacing: 0.7px;">{status}</span>
+      </div>
+   </div>
+
+    
+
+     <div class="slds-size_1-of-12">
+      
+      <template if:true={showActions}>
+        <div class="dropdown">
+          <div class="action-container">
+            <p class="drop-down">Actions</p>
+            <i class="arrow rotate-down" style="
+                  top: -2px;
+                  border-color: #1480d6;
+                  border-width: 0 3px 3px 0;
+                "></i>
+          </div>
+
+          <div class="dropdown-content">
+            <p if:true ={showReviseQuoteButton} class="action" onclick={handleReviseQuoteButtonClick}>Revise Quote</p>
+            <p if:true ={showCreateAmendmentButton} class="action" onclick={handleCreateAmendmentButtonClick}>Create Amendment Quote</p>
+            <p if:true ={showCreateTempSwapQuoteButton} class="action" onclick={handleCreateTempSwapQuoteButtonClick}>Create Temp Swap Quote</p>
+            <p if:true ={showCreateBookingButton} class="action" onclick={handleCreateBookingButtonClick}>Create Booking</p>
+          </div>
+            
+        </div>  
+      </template>
+        
+     </div>
+        
+    <lightning-button label="Quote PDF" onclick={handleQuotePdfButtonClick} class="slds-m-left_small" style="background-color: transparent; border: none; color: black; font-weight: bold;font-color:Black; padding: 0;" if:true={isStageAccepted}></lightning-button>
+
+    </div>
+</div>
+    
+<template if:true={isCreateAmendmentQuoteVisible}>
+  <!--<div class="flow-container" style="min-width : 30rem">-->
+    <!--<lightning-button-icon label = "Close" icon-name="utility:close" alternative-text="Close" onclick={handleCreateAmendmentCloseButtonClick} class="close-button"></lightning-button-icon>-->
+        <c-create-amendment-quote></c-create-amendment-quote>
+       <!-- onstatuschange={handleStatusChange}-->
+  <!--</div>-->
+    </template>
+
+<!-- For side bar icons -->
+  <div class="main-container">
+    <ul>
+      <div class="menu">
+        <template for:each={sections} for:item="section">
+          <div class="options" key={section.key} data-section={section.key} onclick={handleScrollClick}>
+            <div>
+              <!-- <div class="info"><span>{section.label}</span></div> -->
+              <img src={section.src} alt="Icon" style="width: 30px" title={section.label} />
+            </div>
+          </div>
+        </template>
+      </div>
+    </ul>
+
+<!-- Display fields and values -->
+  <div class="body-container">
+      <div style="position: relative; background: white; border: 1px solid grey">
+        <template for:each={sections} for:item="section">
+          <div key={section.key} style="height: 1px"></div>
+          <div class="section" key={section.key} data-view={section.key}>
+            <div class="section-head">
+              <div class="section-name">
+                <img src={section.src} alt="Icon" style="
+                    width: 30px;
+                    border-radius: 22%;
+                    padding: 0px;
+                    margin: 2px 8px 2px 3px;
+                  " />
+                <p>{section.label}</p>
+              </div>
+              <template if:true={section.edit}>
+                <div class="section-edit">
+                  <button class="button-4" title="Edit" onclick={handleEdit} data-id={section.key}>
+                    Edit
+                  </button>
+                </div>
+              </template>
+            </div>
+            <div id={section.key} style="margin-left: 20px; display: flex; flex-wrap: wrap">
+              <template for:each={section.fields} for:item="field">
+                <div key={field.fieldApiName} class="field-container">
+                  <div class="slds-col">
+                    <template if:false={field.checkbox}>
+                      <template if:false={field.lookup}>
+                        <div class="slds-form-element__label" style="
+                            font-size: 0.75rem;
+                            font-family: Trebuchet MS, sans-serif;
+                            font-weight: 200;
+                            color: #656565;
+                          ">
+                          {field.label}
+                        </div>
+                        <br />
+                        <div class="slds-form-element__label fieldValue">
+                          {field.value}
+                        </div>
+                      </template>
+                      <template if:true={field.lookup}>
+                        <div class="slds-form-element__label" style="
+                            font-size: 0.75rem;
+                            font-family: Trebuchet MS, sans-serif;
+                            font-weight: 200;
+                            color: #656565;
+                          ">
+                          {field.label}
+                        </div>
+                        <br />
+                        <a class="slds-form-element__label fieldValue" style="color: #1480d6" data-lookupid={field.Id}
+                          data-object={field.fieldApiName} data-type={field.type}
+                          onclick={navigateToRecord}>{field.value}</a>
+                      </template>
+                    </template>
+                    <template if:true={field.checkbox}>
+                      <div class="checkbox-container">
+                        <div class="checkbox">
+                          <template if:true={field.value}>
+                            <div class="checked"></div>
+                          </template>
+                        </div>
+                        <div class="slds-form-element__label" style="
+                            font-size: 0.75rem;
+                            font-family: Trebuchet MS, sans-serif;
+                            font-weight: 200;
+                            color: #656565;
+                          ">
+                          {field.label}
+                        </div>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+
+<!-- Display Related Tabs -->
+<div class="relatedTab" onmousedown={handleMouseDown}>
+<div>
+  <div onclick={relatedHandlerExpand} style="cursor: pointer">
+    <i class="arrow"></i>
+  </div>
+  <div>R</div>
+  <div>E</div>
+  <div>L</div>
+  <div>A</div>
+  <div>T</div>
+  <div>E</div>
+  <div>D</div>
+  <div class="rotate-left" onclick={relatedHandlerContract} style="cursor: pointer">
+    <i class="arrow"></i>
+  </div>
+</div>
+</div>
+
+<div class="related-content" style={rightPanelWidth}>
+<!-- <div class="related-content" style={rightPanelWidth}> -->
+<lightning-tabset>
+  <lightning-tab label="Quote Stage Activity">
+    <div class="quote-stage-activity-table">
+      <lightning-datatable key-field="Id" data={quoteActivityData} columns={quoteActivityColumns}
+        onrowaction={handleQuoteActivityRowAction} hide-checkbox-column>
+      </lightning-datatable>
+    </div>
+  </lightning-tab>
+<lightning-tab label="Quote Amenity">
+    <div class="quote-amenity-table">
+      <lightning-datatable key-field="Id" data={quoteAmenityData} columns={quoteAmenityColumns}
+        onrowaction={handleQuoteAmenityRowAction} hide-checkbox-column>
+      </lightning-datatable>
+    </div>
+  </lightning-tab> 
+  <lightning-tab label="Quote Comments">
+    <div class="quote-comments-table">
+      <lightning-datatable key-field="Id" data={quoteCommentsData} columns={quoteCommentsColumns}
+        onrowaction={handlequoteCommentsRowAction} hide-checkbox-column>
+      </lightning-datatable>
+    </div>
+  </lightning-tab> 
+  <lightning-tab label="Quote History">
+    <div class="quote-history-table">
+      <lightning-datatable key-field="Id" data={quoteHistoryData} columns={quoteHistoryColumns}
+        onrowaction={handlequoteHistoryRowAction} hide-checkbox-column>
+      </lightning-datatable>
+    </div>
+  </lightning-tab> 
+<!--    <lightning-tab label="Quote Approval History">
+    <div class="quote-approval-history-table">
+      <lightning-datatable key-field="Id" data={quoteApprovalHistoryData} columns={quoteApprovalHistoryColumns}
+        onrowaction={handlequoteApprovalHistoryRowAction} hide-checkbox-column>
+      </lightning-datatable>
+    </div>
+  </lightning-tab> --> 
+  <lightning-tab label="Approval History">
+    <div class="quote-approval-table">
+      <lightning-datatable key-field="ProcessInstanceStepId" data={quoteApprovalProcessData} columns={quoteApprovalProcessColumns}
+        onrowaction={handlequoteApprovalProcessRowAction} hide-checkbox-column>
+        <!-- <lightning-datatable key-field="Id" data={quoteApprovalProcessData} columns={quoteApprovalProcessColumns}
+        onrowaction={handlequoteApprovalProcessRowAction} hide-checkbox-column> -->
+      </lightning-datatable>
+    </div>
+  </lightning-tab> 
+  
+
+</lightning-tabset>
+</div>
+<!-- </div> -->
+
+  </div>
+
+
+<!--    <template if:true={loading}>
+    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+  </template> -->
+  <template if:true ={edit}>
+    <c-record-edit-modal object-api-name="Quote" fields={fields} record-id={recordId} onsubmitted={handleSubmit} oncancelled={handleEditCancel} style="background-color: black"></c-record-edit-modal>
+  </template>
+
+  <!--Calling Revise Quote Screen flow through action Button-->
+  <div class="item slds-p-bottom_large" style="margin-left: 20px;">
+    <!-- <lightning-button label="Revise Quotes" onclick={handleReviseQuoteButtonClick}></lightning-button> -->
+    <template if:true={isReviseQuoteVisible}>
+      <div class="flow-container" style="min-width : 50rem">
+        <lightning-button-icon label = "Close" icon-name="utility:close" alternative-text="Close" onclick={handleCloseButtonClick} class="close-button"></lightning-button-icon>
+        <lightning-flow 
+        flow-input-variables={inputVariables}
+        flow-api-name={reviseQuoteFlowApiName} 
+        onstatuschange={handleStatusChange}>
+    </lightning-flow>
+      </div> 
+    </template>
+  </div>
+   <!--Calling Temp Swap Quote Screen flow through action Button-->
+  <div class="item slds-p-bottom_large" style="margin-left: 20px;">
+    <!-- <lightning-button label="Revise Quotes" onclick={handleCreateTempSwapQuoteButtonClick}></lightning-button> -->
+    <template if:true={isCreateTempSwapQuoteVisible}>
+      <div class="flow-container" style="min-width : 50rem">
+        <lightning-button-icon label = "Close" icon-name="utility:close" alternative-text="Close" onclick={handleTempSwapCloseButtonClick} class="close-button"></lightning-button-icon>
+        <lightning-flow 
+        flow-input-variables={inputVariables}
+        flow-api-name={CreateTempSwapQuoteFlowApiName} 
+        >
+    </lightning-flow>
+      </div> 
+    </template>
+  </div>
+
+   <!--Calling Temp Swap Quote Screen flow through action Button-->
+   <!-- <div class="item slds-p-bottom_large" style="margin-left: 20px;"> -->
+    <!-- <lightning-button label="Revise Quotes" onclick={handleCreateTempSwapQuoteButtonClick}></lightning-button> -->
+    <!-- <template if:true={isCreateBookingVisible}>
+      <div class="flow-container" style="min-width : 50rem">
+        <lightning-button-icon label = "Close" icon-name="utility:close" alternative-text="Close" onclick={handleTempSwapCloseButtonClick} class="close-button"></lightning-button-icon>
+        <lightning-flow 
+        flow-input-variables={inputVariables}
+        flow-api-name={CreateTempSwapQuoteFlowApiName} 
+        >
+    </lightning-flow>
+      </div> 
+    </template>
+  </div> -->
+
+  <!-- Calling Revise Quote Screen flow through action Button -->
+   <template if:true={isStatusAccepted}> 
+    <div class="item slds-p-bottom_large" style="margin-left: 20px;">
+       <!-- <lightning-button label="Create Booking" onclick={handleCreateBookingButtonClick} variant="brand"></lightning-button>  -->
+      <template if:true={isCreateBookingVisible}>
+        <div class="flow-container" style="min-width : 50rem">
+          <lightning-flow 
+          flow-input-variables={inputVariables}
+          flow-api-name={createBookingFlowApiName} 
+          onstatuschange={handleCreateBookingChange}>
+      </lightning-flow>
+        </div> 
+      </template>
+    </div> 
+   </template>
+
+  <!--Calling Quote PDF VFpage through action Button-->
+  <div class="item slds-p-bottom_large" style="margin-left: 20px;">
+    <!-- <lightning-button label="Revise Quotes" onclick={handleReviseQuoteButtonClick}></lightning-button> -->
+    <template if:true={isQuotePDFVisible}>
+      <!-- <div class="flow-container" style="min-width : 50rem"> -->
+        
+      <!-- </div>  -->
+    </template>
+  </div>
+
+
+
+</template>

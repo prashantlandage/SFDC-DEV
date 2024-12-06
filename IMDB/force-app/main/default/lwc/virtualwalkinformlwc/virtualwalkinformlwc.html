@@ -1,0 +1,576 @@
+<template>
+  <!-- <template if:false={captcha}>
+    <div class="captcha" style={captchaBack}>
+      <div style="display: block">
+        <iframe
+          src={navigateTo}
+          name="captchaFrame"
+          onload={captchaLoaded}
+          width="350"
+          height="500"
+          style="border: none"
+        ></iframe>
+      </div>
+      <div class="button-container">
+        <button class="button-81 submit" onclick={captchaCheck}>
+          Continue
+        </button>
+      </div>
+    </div>
+  </template> -->
+
+  <template if:false={captcha}>
+    <template if:false={submitted}>
+      <div class="slds-m-top_medium slds-m-bottom_x-large">
+        <div class="formTitle">
+          <span>HELP US SERVE YOU BETTER</span>
+        </div>
+        <div
+          style="
+            background: linear-gradient(
+              129deg,
+              #cecece,
+              #dadadaf5,
+              #dbe0e1f2,
+              #4a91d954
+            );
+          "
+        >
+          <div class="progress">
+            <lightning-progress-indicator
+              current-step={curstep}
+              type="base"
+              variant="base"
+            >
+              <div class="indicator first">
+                <lightning-progress-step
+                  label="Purpose"
+                  value="1"
+                ></lightning-progress-step
+                ><span>Purpose</span>
+              </div>
+              <div class="indicator">
+                <lightning-progress-step
+                  label="Value First"
+                  value="2"
+                ></lightning-progress-step
+                ><span>Value First</span>
+              </div>
+              <div class="indicator">
+                <lightning-progress-step
+                  label="Happiness"
+                  value="3"
+                ></lightning-progress-step
+                ><span>Happiness</span>
+              </div>
+              <div class="indicator">
+                <lightning-progress-step
+                  label="Personal"
+                  value="4"
+                ></lightning-progress-step
+                ><span>Personal</span>
+              </div>
+            </lightning-progress-indicator>
+          </div>
+          <br />
+        </div>
+        <div></div>
+        <div class="slds-p-around_medium lgc-bg main-container">
+          <!--Home Serve-->
+          <template if:true={page1}>
+            <div class="form-group">
+              <p><b>1. How will your new home serve you?:</b></p>
+              <lightning-radio-group
+                name="radioGroupHome"
+                options={homeoptions}
+                value={valuehome}
+                type="button"
+                onchange={handleRadioChange}
+              ></lightning-radio-group
+              ><br />
+            </div>
+            <!--First Purchase-->
+            <div class="form-group">
+              <p><b>2. Is this your first purchase?:</b></p>
+              <lightning-radio-group
+                name="radioGroupFirst"
+                label=""
+                options={firstpurchaseoptions}
+                value={valuefirst}
+                type="button"
+                onchange={handlefirstpurchaseChange}
+              ></lightning-radio-group
+              ><br />
+            </div>
+            <!--Configuration-->
+            <div class="slds-checkbox">
+              <!-- <lightning-checkbox-group name="Checkbox Group" label="3. Which Configuration are you looking for:"
+                            options={configoptions} value={valueconfig}
+                            onchange={handleConfigChange}></lightning-checkbox-group> -->
+              <p><b>3.Which Configuration are you looking for:</b></p>
+              <template for:each={configoptions} for:item="option">
+                <template if:false={option.selected}>
+                  <div
+                    class="bhk-option"
+                    key={option.label}
+                    data-value={option.value}
+                    data-select={option.selected}
+                    data-pos={option.Id}
+                    onclick={addrequirement}
+                  >
+                    <p>{option.label}</p>
+                  </div>
+                </template>
+                <template if:true={option.selected}>
+                  <div
+                    class="bhk-option selected-bhk"
+                    key={option.label}
+                    data-value={option.value}
+                    data-select={option.selected}
+                    data-pos={option.Id}
+                    onclick={addrequirement}
+                  >
+                    <p>{option.label}</p>
+                  </div>
+                </template>
+              </template>
+            </div>
+            <div class="next-button">
+              <button class="button-81" onclick={topage2}>Next</button>
+            </div>
+          </template>
+          <!--Star Ratings-->
+          <template if:true={page2}>
+            <div class="question">
+              <p>
+                <b>
+                  Which of these do you value most in your home purchase
+                  decision?
+                </b>
+              </p>
+            </div>
+
+            <div class="form-group">
+              <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_3-of-3">
+                  Unit Efficiency Design
+                </div>
+                <div class="slds-col slds-size_3-of-3">
+                  <c-ratingcmp
+                    rname="ue"
+                    value={ue}
+                    onratingvaluechange={handlestarchange}
+                  ></c-ratingcmp>
+                </div>
+                <div class="slds-col slds-size_3-of-3">
+                  Well Connected Location
+                </div>
+                <div class="slds-col slds-size_3-of-3">
+                  <c-ratingcmp
+                    value={wc}
+                    rname="wc"
+                    onratingvaluechange={handlestarchange}
+                  ></c-ratingcmp>
+                </div>
+                <div class="slds-col slds-size_3-of-3">Vastu Compliance</div>
+                <div class="slds-col slds-size_3-of-3">
+                  <c-ratingcmp
+                    value={vc}
+                    rname="vc"
+                    onratingvaluechange={handlestarchange}
+                  ></c-ratingcmp>
+                </div>
+                <div class="slds-col slds-size_3-of-3">Amenities</div>
+                <div class="slds-col slds-size_3-of-3">
+                  <c-ratingcmp
+                    displaylabel="Amenities"
+                    value={am}
+                    rname="am"
+                    onratingvaluechange={handlestarchange}
+                  ></c-ratingcmp>
+                </div>
+                <div class="slds-col slds-size_3-of-3">
+                  Sustainable/Environment Friendly
+                </div>
+                <div class="slds-col slds-size_3-of-3">
+                  <c-ratingcmp
+                    value={se}
+                    rname="se"
+                    onratingvaluechange={handlestarchange}
+                  ></c-ratingcmp>
+                </div>
+              </div>
+            </div>
+            <!--    <template for:each={ratingName} for:item="Rating">
+              <div key={Rating.value} class="starrating">
+                <p><b>{Rating.label}</b></p>
+                <c-ratingcomponent
+                  rname={Rating.value}
+                  onratingvaluechange={handlestarchange}
+                ></c-ratingcomponent>
+              </div>
+            </template> -->
+            <div class="next-button">
+              <button onclick={topage1} class="button-81">Previous</button>
+              <button onclick={topage3} class="button-81">Next</button>
+            </div>
+          </template>
+          <template if:true={page3}>
+            <!--Happiness Quotient-->
+            <div class="question" style="justify-content: start">
+              <p>
+                <b
+                  >Having Which of these would make you the Happiest?(Choose top
+                  3)</b
+                >
+              </p>
+            </div>
+            <div class="b-form-group">
+              <!-- <lightning-checkbox-group name="Checkbox Group"
+                            label="Having Which of these would make you the Happiest?(Choose top 3)"
+                            options={happinessoptions} value={valuehappy}
+                            onchange={handlehappyChange}></lightning-checkbox-group> -->
+              <template for:each={happinessoptions} for:item="option">
+                <template if:false={option.selected}>
+                  <div
+                    class="happy-option"
+                    key={option.label}
+                    data-value={option.value}
+                    data-select={option.selected}
+                    data-pos={option.Id}
+                    onclick={addHappiness}
+                  >
+                    <p>{option.label}</p>
+                  </div>
+                </template>
+                <template if:true={option.selected}>
+                  <div
+                    class="s-happy-option"
+                    key={option.label}
+                    data-value={option.value}
+                    data-select={option.selected}
+                    data-pos={option.Id}
+                    onclick={addHappiness}
+                  >
+                    <p>{option.label}</p>
+                  </div>
+                </template>
+              </template>
+            </div>
+
+            <!--Stopping You-->
+            <div class="question" style="justify-content: start">
+              <p>
+                <b
+                  >Important challenges you would want to overcome making a
+                  decision? (Choose top 3)</b
+                >
+              </p>
+            </div>
+
+            <div class="b-form-group">
+              <!-- <lightning-checkbox-group name="Checkbox Group"
+                            label="Important challenges you would want to overcome making a decision? (Choose top 3)"
+                            options={stoppingoptions} value={valuestopping}
+                            onchange={handlestopChange}></lightning-checkbox-group> -->
+              <template for:each={stoppingoptions} for:item="option">
+                <template if:false={option.selected}>
+                  <div
+                    class="happy-option"
+                    key={option.label}
+                    data-value={option.value}
+                    data-select={option.selected}
+                    data-pos={option.Id}
+                    onclick={addStopping}
+                  >
+                    <p>{option.label}</p>
+                  </div>
+                </template>
+                <template if:true={option.selected}>
+                  <div
+                    class="s-happy-option"
+                    key={option.label}
+                    data-value={option.value}
+                    data-select={option.selected}
+                    data-pos={option.Id}
+                    onclick={addStopping}
+                  >
+                    <p>{option.label}</p>
+                  </div>
+                </template>
+              </template>
+            </div>
+            <div class="next-button">
+              <button onclick={topage2} class="button-81">Previous</button>
+              <button onclick={topage4} class="button-81">Next</button>
+            </div>
+          </template>
+          <template if:true={page4}>
+            <!---Lead Insertion-->
+
+            <div class="slds-grid slds-gutters">
+              <div class="slds-col">
+                <div class="personal-info">
+                  <div class="formsection">
+                    <h2>Personal Information</h2>
+                  </div>
+                  <!--Name-->
+                  <div class="c-form-group">
+                    <lightning-input
+                      label="Name"
+                      name="leadName"
+                      required="required"
+                      type="text"
+                      value={walkinrec.Name__c}
+                      onchange={handleNameChange}
+                      placeholder="Please Enter FullName"
+                    ></lightning-input>
+                  </div>
+                  <!--Mobile-->
+                  <div class="c-form-group">
+                    <lightning-input
+                      label="Mobile"
+                      name="Mobile"
+                      required="required"
+                      type="text"
+                      value={walkinrec.Mobile_No__c}
+                      onchange={handleMobileChange}
+                      placeholder="Please Enter Mobile No"
+                    ></lightning-input>
+                  </div>
+                  <!--Email-->
+                  <div class="c-form-group">
+                    <lightning-input
+                      label="Email"
+                      name="Email"
+                      required="required"
+                      type="text"
+                      value={walkinrec.Email__c}
+                      onchange={handleEmailChange}
+                      placeholder="Please Enter Email Id"
+                    ></lightning-input>
+                  </div>
+                  <!--Location-->
+                  <div class="c-form-group">
+                    <lightning-input
+                      label="Locality"
+                      name="Location__c"
+                      required="required"
+                      type="text"
+                      value={walkinrec.Location__c}
+                      onchange={handleLocationChange}
+                      placeholder="Place of Current Stay"
+                    ></lightning-input>
+                  </div>
+                  <!--Industry-->
+                  <!-- <template if:true={IndustryPicklistValues.data}> -->
+                  <div class="c-form-group">
+                    <!--  <lightning-input
+                      label="Industry"
+                      name="Industry"
+                      type="text"
+                      value={walkinrec.Industry__c}
+                      onchange={handleIndustryChange}
+                      placeholder="Please Enter the Industry"
+                    ></lightning-input> -->
+
+                    <lightning-combobox
+                      label=" Industry"
+                      value={walkinrec.Industry__c}
+                      placeholder="Select Industry"
+                      options={industryOptions}
+                      required="required"
+                      onchange={handleIndustryChange}
+                    >
+                    </lightning-combobox>
+                  </div>
+                  <!-- </template> -->
+                  <!--Company-->
+                  <div class="c-form-group">
+                    <lightning-input
+                      label="Company"
+                      name="Company"
+                      required="required"
+                      type="text"
+                      value={walkinrec.Company__c}
+                      onchange={handleCompanyChange}
+                      placeholder="Please Enter Company"
+                    ></lightning-input>
+                  </div>
+                  <!--Designation-->
+                  <!-- <template if:true={DesignationPicklistValues.data}> -->
+                  <div class="c-form-group">
+                    <!--  <lightning-input
+                      label="Designation"
+                      name="Designation__c"
+                      required="required"
+                      type="text"
+                      value={walkinrec.Designation__c}
+                      onchange={handleDesignationChange}
+                      placeholder="Please Enter Designation"
+                    ></lightning-input> -->
+
+                    <lightning-combobox
+                      label=" Designation"
+                      value={walkinrec.Designation__c}
+                      placeholder="Select Designation"
+                      options={designationOptions}
+                      required="required"
+                      onchange={handleDesignationChange}
+                    >
+                    </lightning-combobox>
+                  </div>
+                  <!-- </template> -->
+                  <!--Age-
+                  <template if:true={AgePicklistValues.data}> -->
+                  <div class="c-form-group">
+                    <lightning-combobox
+                      label=" Age"
+                      value={walkinrec.Age__c}
+                      placeholder="Select Age"
+                      options={ageGroupOptions}
+                      required="required"
+                      onchange={handleAgeChange}
+                    >
+                    </lightning-combobox>
+                  </div>
+                  <!-- </template> -->
+                </div>
+                <div class="office-info">
+                  <div class="formsection">
+                    <h2>For office use only</h2>
+                  </div>
+                  <div>
+                    <div class="c-form-group">
+                      <lightning-radio-group
+                        name="radioGroup"
+                        style="columns: 3"
+                        label="Walk In Type"
+                        options={walkintypeoptions}
+                        value={value}
+                        type="radio"
+                        onchange={handletypechange}
+                        disabled={IsDisable}
+                      ></lightning-radio-group>
+                    </div>
+
+                    <!--Project-->
+                    <div if:true={directwalkin} class="c-form-group">
+                      <!-- custom lookup -->
+                      <c-lead-inbox-resuable-lookup
+                        class="lookup"
+                        label="Interested Project"
+                        placeholder="search project"
+                        selected-icon-name="standard:orders"
+                        object-label="Project"
+                        object-api-name="Project__c"
+                        field-api-name="Name"
+                        other-criteria=""
+                        other-field-api-name=""
+                        required="true"
+                        onmyevent={handleclearvalue}
+                        onvalueselected={handleInterestedProjectChange}
+                      >
+                      </c-lead-inbox-resuable-lookup>
+                    </div>
+                    <!-- Project -->
+                  </div>
+                  <!--Campaign-->
+                  <div if:true={directwalkin} class="c-form-group">
+                    <!-- custom lookup -->
+                    <c-lead-inbox-resuable-lookup
+                      class="lookup"
+                      label="Campaign"
+                      placeholder="search campaign"
+                      selected-icon-name="standard:orders"
+                      object-label="Campaign"
+                      object-api-name="Campaign"
+                      field-api-name="Name"
+                      other-criteria=""
+                      other-field-api-name=""
+                      required="true"
+                      onmyevent={handlecampclearvalue}
+                      onvalueselected={handleCampaignChange}
+                    >
+                    </c-lead-inbox-resuable-lookup>
+                  </div>
+                  <!-- Project -->
+
+                  <!--Phase-->
+
+                  <div if:true={directwalkin} class="c-form-group">
+                    <!-- custom lookup -->
+                    <c-lead-inbox-resuable-lookup
+                      class="lookup"
+                      label="Phase"
+                      placeholder="search Phase"
+                      selected-icon-name="standard:orders"
+                      object-label="Phase"
+                      object-api-name="Phase__c"
+                      field-api-name="Name"
+                      parent-record-id={selectedProject}
+                      parent-field-api-name="Project__c"
+                      other-field-api-name=""
+                      onmyevent={handlePhclearvalue}
+                      onvalueselected={handlePhaseChange}
+                    >
+                    </c-lead-inbox-resuable-lookup>
+                  </div>
+                  <!--Phase-->
+                  <!--Sales Rep-->
+                  <template if:true={salesOptions}>
+                    <div if:true={directwalkin} class="c-form-group">
+                      <lightning-combobox
+                        label="Sales Rep"
+                        placeholder="Select Sales Rep"
+                        options={salesOptions}
+                        required="required"
+                        onchange={handleSaleschange}
+                      >
+                      </lightning-combobox>
+                    </div>
+                  </template>
+                  <!--Source-->
+                  <!--    <template if:true={SourcePicklistValues.data}>
+                    <div class="c-form-group">
+                      <lightning-combobox
+                        label="Source"
+                        value={wlakinrec.Source__c}
+                        placeholder="Select Source"
+                        options={SourcePicklistValues.data.values}
+                        required="required"
+                        onchange={handleSourceChange}
+                      >
+                      </lightning-combobox>
+                    </div>
+                  </template>
+                --></div>
+              </div>
+            </div>
+            <!---<div>
+                        <c-captcha oncaptchareceived={handleCaptchaReceived}></c-captcha>
+                    </div>-->
+            <br /><br />
+            <div class="next-button">
+              <button onclick={topage3} class="button-81">Previous</button>
+              <button onclick={handleSave} class="button-81 submit">
+                Submit
+              </button>
+            </div>
+          </template>
+        </div>
+      </div>
+    </template>
+    <template if:true={loading}>
+      <div class="center">
+        <div class="loader"></div>
+        <br />
+      </div>
+      <p>loading</p>
+    </template>
+
+    <template if:true={submitted}>
+      <div style={thankBack}></div>
+    </template>
+  </template>
+</template>

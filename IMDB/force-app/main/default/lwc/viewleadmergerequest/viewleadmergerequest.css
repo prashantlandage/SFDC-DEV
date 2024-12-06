@@ -1,0 +1,94 @@
+.Container{
+    display: flex;
+    padding-top: 30px;
+  }
+  .Title{
+    float:right;
+    font-size:x-large
+  }
+  
+  .slds-align_absolute-center{
+    font-size:x-large;
+  }
+  
+  .header{
+    padding-top: 10px;
+    font-size: larger;
+  }
+  
+  
+  .MainContainer{
+      background-color: white;
+  }
+  .subContainer{
+    padding:0px 26px;
+    }
+
+  .c-border {
+    border: 2px solid rgb(71, 71, 71);
+    margin: 0px 8px;
+    border-radius: 10px 10px 0px 0px;
+    border-bottom: none;
+  }
+  
+  
+  .button{
+    margin-top: 5px;
+align-items: center;
+  
+    margin-right: 5px;
+
+    /* margin-left: 200px; */
+}
+
+/* .slds-modal__container:before {
+ 
+  display: inline-block;
+  height: 80;
+  content: '';
+  vertical-align: middle;
+} */
+
+.slds-modal__container {
+  width: 550px;
+  height: 700px;
+  position: absolute fixed;
+  left: 17%;
+  top: 30%; 
+ 
+  margin-left: -170px;
+  margin-top: -180px;
+}
+
+.Button{
+  display: flex;
+  justify-content: center;
+  margin: 20px 0px;
+}
+
+.Approve {
+  width: 30%;
+  margin-right: 20px;
+}
+
+
+.Reject{
+  margin-right: 20px;
+    display: flex;
+}
+
+.THIS {
+  background-color: white;
+  height: 100%;
+}
+
+.h-fields {
+  display: flex;
+}
+
+.h-field {
+  margin: 12px;
+  font-family: Arial, sans-serif;
+  font-size: 0.86rem;
+  min-width: 100px;
+}
